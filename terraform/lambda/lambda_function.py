@@ -22,20 +22,15 @@ def lambda_handler(event, context):
     # Récupération du nom de l'objet
     key = unquote_plus(event["Records"][0]["s3"]["object"]["key"])
     # extration de l'utilisateur et de l'id de la tâche
-    user, task_id= key.split('/')[:2]
+    user, task_id = key.split("/")[:2]
 
     # Appel au service, en passant l'image à analyser (bucket et key)
     # On souhaite au maximum 5 labels et uniquement les labels avec un taux de confiance > 0.75
     # Vous pouvez faire varier ces valeurs.
     label_data = reckognition.detect_labels(
-    Image={
-    "S3Object": {
-    "Bucket": bucket,
-    "Name": key
-    }
-    },
-    MaxLabels=5,
-    MinConfidence=0.75
+        Image={"S3Object": {"Bucket": bucket, "Name": key}},
+        MaxLabels=5,
+        MinConfidence=0.75,
     )
     logger.info(f"Labels data : {label_data}")
     # On extrait les labels du résultat
