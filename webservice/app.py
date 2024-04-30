@@ -10,6 +10,8 @@ from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
+import uuid
+import time
 
 from getSignedUrl import getSignedUrl
 
@@ -53,15 +55,21 @@ async def post_a_post(post: Post, authorization: str | None = Header(default=Non
     logger.info(f"body : {post.body}")
     logger.info(f"user : {authorization}")
 
+    postId = f'POST#{uuid.uuid4()}'
+
     # Doit retourner le résultat de la requête la table dynamodb
-    return []
+    data = table.put_item(Item={"user": "USER#" + authorization, "post": postId, "body": post.body})
+    return data
 
 
 @app.get("/posts")
 async def get_all_posts(user: Union[str, None] = None):
 
-    # Doit retourner une liste de post
-    return []
+    if user is None:
+        data = table.scan()
+    else:
+        data = table.query(KeyConditionExpression=Key("user").eq("USER#" + user))
+    return data
 
 
 @app.delete("/posts/{post_id}")
