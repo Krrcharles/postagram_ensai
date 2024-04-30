@@ -38,7 +38,7 @@ def lambda_handler(event, context):
     logger.info(f"Labels detected : {labels}")
 
     table.update_item(
-        Key={"user": user, "post": task_id},
+        Key={"user": user, "id": task_id},
         UpdateExpression="SET labels = :labels",
         ExpressionAttributeValues={":labels": labels},
     )
@@ -52,7 +52,7 @@ def lambda_handler(event, context):
     )
 
     table.update_item(
-        Key={"user": user, "post": task_id},
+        Key={"user": user, "id": task_id},
         UpdateExpression="SET image = :url",
         ExpressionAttributeValues={":url": url},
     )

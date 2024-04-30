@@ -58,7 +58,7 @@ async def post_a_post(post: Post, authorization: str | None = Header(default=Non
     postId = f'POST#{uuid.uuid4()}'
 
     # Doit retourner le résultat de la requête la table dynamodb
-    data = table.put_item(Item={"user": "USER#" + authorization, "post": postId, "body": post.body, "image": "", "labels": []})
+    data = table.put_item(Item={"user": "USER#" + authorization, "id": postId, "body": post.body, "image": "", "labels": []})
     return data
 
 
@@ -76,7 +76,7 @@ async def get_all_posts(user: Union[str, None] = None):
 async def get_post_user_id(post_id: str):
     
     data = table.delete_item(
-        Key={'post' : 'POST#'*(post_id[0] == 'P') + post_id,} # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
+        Key={'id' : 'POST#'*(post_id[0] == 'P') + post_id,} # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
     )
     return data
 
