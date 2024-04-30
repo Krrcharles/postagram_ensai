@@ -73,8 +73,11 @@ async def get_all_posts(user: Union[str, None] = None):
 
 @app.delete("/posts/{post_id}")
 async def get_post_user_id(post_id: str):
-    # Doit retourner le résultat de la requête la table dynamodb
-    return []
+    
+    data = table.delete_item(
+        Key={'post' : 'POST#'*(post_id[0] == 'P') + post_id,} # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
+    )
+    return data
 
 
 @app.get("/signedUrlPut")
