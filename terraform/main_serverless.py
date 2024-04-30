@@ -78,7 +78,7 @@ class ServerlessStack(TerraformStack):
             filename=code.path,
             handler="lambda_function.lambda_handler",
             environment={
-                "variables": {"BUCKET": bucket.id, "DYNAMO_TABLE": dynamo_table}
+                "variables": {"BUCKET": bucket.id, "DYNAMO_TABLE": dynamo_table.id}
             },
         )
 
