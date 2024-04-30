@@ -29,7 +29,13 @@ class ServerlessStack(TerraformStack):
 
         account_id = DataAwsCallerIdentity(self, "acount_id").account_id
 
-        bucket = S3Bucket()
+        bucket = S3Bucket(
+            self,
+            "postagram_bucket",
+            bucket_prefix="my-postagram-bucket",
+            acl="private",
+            force_destroy=True,
+        )
 
         S3BucketCorsConfiguration(
             self,
