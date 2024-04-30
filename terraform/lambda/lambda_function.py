@@ -47,11 +47,12 @@ def lambda_handler(event, context):
         UpdateExpression="SET labels = :labels",
         ExpressionAttributeValues={":labels": labels},
     )
-"""
+
+    image_url = f"https://{bucket}.s3.amazonaws.com/{key}"
+
     logger.info(f"Labels added to table : {image_url}")
     table.update_item(
         Key={"user": user, "post": task_id},
         UpdateExpression="SET image = :image",
         ExpressionAttributeValues={":image": image_url},
     )
-    return "Success"""
