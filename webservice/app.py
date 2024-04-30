@@ -58,7 +58,7 @@ async def post_a_post(post: Post, authorization: str | None = Header(default=Non
     postId = f'POST#{uuid.uuid4()}'
 
     # Doit retourner le résultat de la requête la table dynamodb
-    data = table.put_item(Item={"user": "USER#" + authorization, "post": postId, "body": post.body})
+    data = table.put_item(Item={"user": "USER#" + authorization, "post": postId, "body": post.body, "image": "", "labels": []})
     return data
 
 
