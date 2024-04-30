@@ -9,17 +9,22 @@ from cdktf_cdktf_provider_aws.lb import Lb
 from cdktf_cdktf_provider_aws.lb_target_group import LbTargetGroup
 from cdktf_cdktf_provider_aws.lb_listener import LbListener
 from cdktf_cdktf_provider_aws.autoscaling_group import AutoscalingGroup
-from cdktf_cdktf_provider_aws.security_group import SecurityGroup, SecurityGroupIngress, SecurityGroupEgress
+from cdktf_cdktf_provider_aws.security_group import (
+    SecurityGroup,
+    SecurityGroupIngress,
+    SecurityGroupEgress,
+)
 from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdentity
 
 import base64
 
-bucket=""
-dynamo_table=""
-your_repo=""
+bucket = ""
+dynamo_table = ""
+your_repo = ""
 
 
-user_data= base64.b64encode(f"""
+user_data = base64.b64encode(
+    f"""
 #!/bin/bash
 echo "userdata-start"
 echo 'export BUCKET={bucket}' >> /etc/environment
@@ -30,7 +35,11 @@ git clone {your_repo}
 cd Ensai-CloudComputingLab1
 pip3 install -r requirements.txt
 python3 app.py
-echo "userdata-end""".encode("ascii")).decode("ascii")
+echo "userdata-end""".encode(
+        "ascii"
+    )
+).decode("ascii")
+
 
 class ServerStack(TerraformStack):
     def __init__(self, scope: Construct, id: str):
@@ -38,25 +47,22 @@ class ServerStack(TerraformStack):
         AwsProvider(self, "AWS", region="us-east-1")
         account_id = DataAwsCallerIdentity(self, "acount_id").account_id
 
-        default_vpc = DefaultVpc(
-            self, "default_vpc"
-        )
-         
-        # Les AZ de us-east-1 sont de la forme us-east-1x 
+        default_vpc = DefaultVpc(self, "default_vpc")
+
+        # Les AZ de us-east-1 sont de la forme us-east-1x
         # avec x une lettre dans abcdef. Ne permet pas de déployer
         # automatiquement ce code sur une autre région. Le code
         # pour y arriver est vraiment compliqué.
         az_ids = [f"us-east-1{i}" for i in "abcdef"]
-        subnets= []
-        for i,az_id in enumerate(az_ids):
-            subnets.append(DefaultSubnet(
-            self, f"default_sub{i}",
-            availability_zone=az_id
-        ).id)
-            
+        subnets = []
+        for i, az_id in enumerate(az_ids):
+            subnets.append(
+                DefaultSubnet(self, f"default_sub{i}", availability_zone=az_id).id
+            )
 
         security_group = SecurityGroup(
-            self, "sg-tp",
+            self,
+            "sg-tp",
             ingress=[
                 SecurityGroupIngress(
                     from_port=22,
@@ -65,33 +71,27 @@ class ServerStack(TerraformStack):
                     protocol="TCP",
                 ),
                 SecurityGroupIngress(
-                    from_port=80,
-                    to_port=80,
-                    cidr_blocks=["0.0.0.0/0"],
-                    protocol="TCP"
+                    from_port=80, to_port=80, cidr_blocks=["0.0.0.0/0"], protocol="TCP"
                 ),
                 SecurityGroupIngress(
                     from_port=8080,
                     to_port=8080,
                     cidr_blocks=["0.0.0.0/0"],
-                    protocol="TCP"
-                )
+                    protocol="TCP",
+                ),
             ],
             egress=[
                 SecurityGroupEgress(
-                    from_port=0,
-                    to_port=0,
-                    cidr_blocks=["0.0.0.0/0"],
-                    protocol="-1"
+                    from_port=0, to_port=0, cidr_blocks=["0.0.0.0/0"], protocol="-1"
                 )
-            ]
-            )
-        
+            ],
+        )
+
         launch_template = LaunchTemplate()
-        
+
         lb = Lb()
 
-        target_group=LbTargetGroup()
+        target_group = LbTargetGroup()
 
         lb_listener = LbListener()
 
