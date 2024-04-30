@@ -8,4 +8,5 @@ python_version = "3"
 
 [packages]
 cdktf = "~=0.20.5"
+cdktf_cdktf_provider_aws = "19.16.0"
 pytest = "*"
