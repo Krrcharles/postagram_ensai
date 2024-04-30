@@ -54,11 +54,30 @@ class ServerlessStack(TerraformStack):
         # Packagage du code
         code = TerraformAsset()
 
-        lambda_function = LambdaFunction()
+        lambda_function = LambdaFunction(self, "lambda")
 
-        permission = LambdaPermission()
+        permission = LambdaPermission(
+            self,
+            "lambda_permission",
+            action="lambda:InvokeFunction",
+            statement_id="AllowExecutionFromS3Bucket",
+            function_name=lambda_function.arn,
+            principal="s3.amazonaws.com",
+            source_arn=bucket.arn,
+            source_account=account_id,
+        )
 
-        notification = S3BucketNotification()
+        notification = S3BucketNotification(
+            self,
+            "notification",
+            lambda_function=[
+                S3BucketNotificationLambdaFunction(
+                    lambda_function_arn=lambda_function.arn,
+                    events=["s3:ObjectCreated:*"],
+                )
+            ],
+            bucket=bucket.id,
+        )
 
         TerraformOutput()
 
