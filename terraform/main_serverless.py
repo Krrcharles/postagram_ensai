@@ -49,7 +49,19 @@ class ServerlessStack(TerraformStack):
                 )
             ],
         )
-        dynamo_table = DynamodbTable()
+        dynamo_table = DynamodbTable(
+            self, "DynamodDB-table",
+            name= "postagram",
+            hash_key="user",
+            range_key="post",
+            attribute=[
+            DynamodbTableAttribute(name="user",type="S" ),
+            DynamodbTableAttribute(name="post",type="S" ),
+            ],
+            billing_mode="PROVISIONED",
+            read_capacity=5,
+            write_capacity=5
+        )
 
         # Packagage du code
         code = TerraformAsset()
