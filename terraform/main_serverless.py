@@ -65,34 +65,49 @@ class ServerlessStack(TerraformStack):
         )
 
         # Packagage du code
-        # code = TerraformAsset()
+        code = TerraformAsset(self, "code", path="./lambda", type=AssetType.ARCHIVE)
 
-        # lambda_function = LambdaFunction(
-        #     self, "lambda", function_name="postagram", role=""
-        # )
+        lambda_function = LambdaFunction(
+            self,
+            "lambda",
+            function_name="postagram_lambda",
+            runtime="python3.9",
+            memory_size=128,
+            timeout=5,
+            role=f"arn:aws:iam::{account_id}:role/LabRole",
+            filename=code.path,
+            handler="lambda_function.lambda_handler",
+            environment={
+                "variables": {
+                    "ENV_VAR": "value",
+                    "ENV_VAR2": "value2",
+                    "ENV_VAR3": "value3",
+                }
+            },
+        )
 
-        # permission = LambdaPermission(
-        #     self,
-        #     "lambda_permission",
-        #     action="lambda:InvokeFunction",
-        #     statement_id="AllowExecutionFromS3Bucket",
-        #     function_name=lambda_function.arn,
-        #     principal="s3.amazonaws.com",
-        #     source_arn=bucket.arn,
-        #     source_account=account_id,
-        # )
+        permission = LambdaPermission(
+            self,
+            "lambda_permission",
+            action="lambda:InvokeFunction",
+            statement_id="AllowExecutionFromS3Bucket",
+            function_name=lambda_function.arn,
+            principal="s3.amazonaws.com",
+            source_arn=bucket.arn,
+            source_account=account_id,
+        )
 
-        # notification = S3BucketNotification(
-        #     self,
-        #     "notification",
-        #     lambda_function=[
-        #         S3BucketNotificationLambdaFunction(
-        #             lambda_function_arn=lambda_function.arn,
-        #             events=["s3:ObjectCreated:*"],
-        #         )
-        #     ],
-        #     bucket=bucket.id,
-        # )
+        notification = S3BucketNotification(
+            self,
+            "notification",
+            lambda_function=[
+                S3BucketNotificationLambdaFunction(
+                    lambda_function_arn=lambda_function.arn,
+                    events=["s3:ObjectCreated:*"],
+                )
+            ],
+            bucket=bucket.id,
+        )
 
         # Output bucket id
         TerraformOutput(
