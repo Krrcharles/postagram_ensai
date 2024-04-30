@@ -43,11 +43,17 @@ def lambda_handler(event, context):
         ExpressionAttributeValues={":labels": labels},
     )
 
-    image_url = f"https://{bucket}.s3.amazonaws.com/{key}"
+    url = s3.generate_presigned_url(
+    Params={
+    "Bucket": bucket,
+    "Key": key,
+    },
+    ClientMethod='get_object'
+    )
 
-    logger.info(f"Labels added to table : {image_url}")
     table.update_item(
         Key={"user": user, "post": task_id},
-        UpdateExpression="SET image = :image",
-        ExpressionAttributeValues={":image": image_url},
+        UpdateExpression="SET image = :url",
+        ExpressionAttributeValues={":url": url},
     )
+
