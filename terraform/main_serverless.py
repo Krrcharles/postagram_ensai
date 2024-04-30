@@ -50,50 +50,62 @@ class ServerlessStack(TerraformStack):
             ],
         )
         dynamo_table = DynamodbTable(
-            self, "DynamodDB-table",
-            name= "postagram",
+            self,
+            "DynamodDB-table",
+            name="postagram",
             hash_key="user",
             range_key="post",
             attribute=[
-            DynamodbTableAttribute(name="user",type="S" ),
-            DynamodbTableAttribute(name="post",type="S" ),
+                DynamodbTableAttribute(name="user", type="S"),
+                DynamodbTableAttribute(name="post", type="S"),
             ],
             billing_mode="PROVISIONED",
             read_capacity=5,
-            write_capacity=5
+            write_capacity=5,
         )
 
         # Packagage du code
-        code = TerraformAsset()
+        # code = TerraformAsset()
 
-        lambda_function = LambdaFunction(self, "lambda")
+        # lambda_function = LambdaFunction(
+        #     self, "lambda", function_name="postagram", role=""
+        # )
 
-        permission = LambdaPermission(
+        # permission = LambdaPermission(
+        #     self,
+        #     "lambda_permission",
+        #     action="lambda:InvokeFunction",
+        #     statement_id="AllowExecutionFromS3Bucket",
+        #     function_name=lambda_function.arn,
+        #     principal="s3.amazonaws.com",
+        #     source_arn=bucket.arn,
+        #     source_account=account_id,
+        # )
+
+        # notification = S3BucketNotification(
+        #     self,
+        #     "notification",
+        #     lambda_function=[
+        #         S3BucketNotificationLambdaFunction(
+        #             lambda_function_arn=lambda_function.arn,
+        #             events=["s3:ObjectCreated:*"],
+        #         )
+        #     ],
+        #     bucket=bucket.id,
+        # )
+
+        # Output bucket id
+        TerraformOutput(
             self,
-            "lambda_permission",
-            action="lambda:InvokeFunction",
-            statement_id="AllowExecutionFromS3Bucket",
-            function_name=lambda_function.arn,
-            principal="s3.amazonaws.com",
-            source_arn=bucket.arn,
-            source_account=account_id,
+            "bucket_id",
+            value=bucket.id,
         )
-
-        notification = S3BucketNotification(
+        # Output dynamo_table id
+        TerraformOutput(
             self,
-            "notification",
-            lambda_function=[
-                S3BucketNotificationLambdaFunction(
-                    lambda_function_arn=lambda_function.arn,
-                    events=["s3:ObjectCreated:*"],
-                )
-            ],
-            bucket=bucket.id,
+            "dynamo_table_id",
+            value=dynamo_table.id,
         )
-
-        TerraformOutput()
-
-        TerraformOutput()
 
 
 app = App()
