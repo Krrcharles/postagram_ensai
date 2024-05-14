@@ -105,7 +105,7 @@ class ServerStack(TerraformStack):
         lb = Lb(
             self,
             "lb",
-            security_groups=[security_group.id],
+            security_groups=[security_group],
             subnets=subnets,
             load_balancer_type="application",
         )
