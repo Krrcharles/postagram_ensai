@@ -98,7 +98,7 @@ class ServerStack(TerraformStack):
             self,
             "lt",
             image_id="ami-0b0dcb5067f2727d8",
-            instance_type="t3.micro",
+            instance_type="t2.micro",
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
