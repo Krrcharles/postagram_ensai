@@ -20,7 +20,7 @@ import base64
 
 bucket = ""
 dynamo_table = ""
-your_repo = ""
+your_repo = "https://github.com/Krrcharles/postagram_ensai"
 
 
 user_data = base64.b64encode(
