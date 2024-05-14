@@ -46,19 +46,16 @@ class Post(BaseModel):
     body: str
 
 
-# EAST 2 ?
-# Pas WEST 1 ?
 my_config = Config(
-    region_name='us-east-2',
-    signature_version='v4',
+    region_name="us-east-1",
+    signature_version="v4",
 )
 
-dynamodb = boto3.resource('dynamodb', config=my_config)
+dynamodb = boto3.resource("dynamodb", config=my_config)
 
 table = dynamodb.Table(os.getenv("DYNAMO_TABLE"))
-s3_client = boto3.client('s3', config=boto3.session.Config(signature_version='s3v4'))
+s3_client = boto3.client("s3", config=boto3.session.Config(signature_version="s3v4"))
 bucket = os.getenv("BUCKET")
-
 
 
 @app.post("/posts")
@@ -77,7 +74,6 @@ async def post_a_post(post: Post, authorization: str | None = Header(default=Non
             "id": postId,
             "body": post.body,
             "image": "",
-            "labels": [],
         }
     )
 
@@ -97,15 +93,9 @@ async def get_all_posts(user: Union[str, None] = None):
     return data["Items"]
 
 
-@app.delete("/posts/{post_id}")
-async def get_post_user_id(post_id: str):
-
-    data = table.delete_item(
-        Key={
-            "id": "POST#" * (post_id[0] == "P") + post_id,
-        }  # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
-    )
-    return data
+# @app.delete("/posts/{post_id}")
+# async def get_post_user_id(post_id: str):
+#     pass
 
 
 @app.get("/signedUrlPut")
