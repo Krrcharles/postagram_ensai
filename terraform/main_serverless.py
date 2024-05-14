@@ -41,14 +41,13 @@ class ServerlessStack(TerraformStack):
             self,
             "cors",
             bucket=bucket.id,
-            cors_rule=[
-                S3BucketCorsConfigurationCorsRule(
-                    allowed_headers=["*"],
-                    allowed_methods=["GET", "HEAD", "PUT"],
-                    allowed_origins=["*"],
-                )
-            ],
-        )
+            cors_rule=[S3BucketCorsConfigurationCorsRule(
+                allowed_headers = ["*"],
+                allowed_methods = ["GET", "HEAD", "PUT"],
+                allowed_origins = ["*"]
+            )]
+            )
+
         dynamo_table = DynamodbTable(
             self,
             "DynamodDB-table",
@@ -63,8 +62,7 @@ class ServerlessStack(TerraformStack):
             read_capacity=5,
             write_capacity=5,
         )
-
-        # Packagage du code
+         # Packagage du code
         code = TerraformAsset(self, "code", path="./lambda", type=AssetType.ARCHIVE)
 
         lambda_function = LambdaFunction(
@@ -91,8 +89,19 @@ class ServerlessStack(TerraformStack):
             principal="s3.amazonaws.com",
             source_arn=bucket.arn,
             source_account=account_id,
+            depends_on=[lambda_function, bucket]
         )
 
+        notification = S3BucketNotification(
+            self, "notification",
+            lambda_function=[S3BucketNotificationLambdaFunction(
+                lambda_function_arn=lambda_function.arn,
+                events=["s3:ObjectCreated:*"]
+            )],
+            bucket=bucket.id,
+            depends_on=[permission]
+        )
+        
         notification = S3BucketNotification(
             self,
             "notification",
@@ -117,7 +126,6 @@ class ServerlessStack(TerraformStack):
             "dynamo_table_id",
             value=dynamo_table.id,
         )
-
 
 app = App()
 ServerlessStack(app, "cdktf_serverless")
