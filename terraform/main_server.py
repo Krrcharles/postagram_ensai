@@ -113,7 +113,7 @@ class ServerStack(TerraformStack):
         target_group = LbTargetGroup(
             self,
             "target_group",
-            port=8080,
+            port=80,
             protocol="HTTP",
             vpc_id=default_vpc.id,
             target_type="instance",
