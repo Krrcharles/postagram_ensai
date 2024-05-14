@@ -91,15 +91,56 @@ class ServerStack(TerraformStack):
             ],
         )
 
-        launch_template = LaunchTemplate()
+        launch_template = LaunchTemplate(
+            self,
+            "lt",
+            image_id="ami-0b0dcb5067f2727d8",
+            instance_type="t3.micro",
+            user_data=user_data,
+            vpc_security_group_ids=[security_group.id],
+            key_name="vockey",
+            tags={"Name": "postagram-server"},
+        )
 
-        lb = Lb()
+        lb = Lb(
+            self,
+            "lb",
+            security_groups=[security_group.id],
+            subnets=subnets,
+            target_group_arns=[launch_template.target_group.arn],
+            load_balancer_type="application",
+        )
 
-        target_group = LbTargetGroup()
+        target_group = LbTargetGroup(
+            self,
+            "target_group",
+            port=8080,
+            protocol="HTTP",
+            vpc_id=default_vpc.id,
+            target_type="instance",
+        )
 
-        lb_listener = LbListener()
+        lb_listener = LbListener(
+            self,
+            "lb_listener",
+            load_balancer_arn=lb.arn,
+            port=80,
+            protocol="HTTP",
+            default_action=LbListenerDefaultAction(type="forward", target_group_arn=target_group.arn),
+        )
 
-        asg = AutoscalingGroup()
+        asg = AutoscalingGroup(
+            self,
+            "asg",
+            launch_template={
+                id:launch_template.id
+            },
+            vpc_zone_identifier=subnets,
+            target_group_arns=[target_group.arn],
+            max_size=1,
+            min_size=3,
+            desired_capacity=1,
+        )
 
 
 app = App()
