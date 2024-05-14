@@ -11,6 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import uvicorn
 import uuid
+import json
 import time
 
 from getSignedUrl import getSignedUrl
@@ -55,10 +56,20 @@ async def post_a_post(post: Post, authorization: str | None = Header(default=Non
     logger.info(f"body : {post.body}")
     logger.info(f"user : {authorization}")
 
-    postId = f'POST#{uuid.uuid4()}'
+    postId = f"POST#{uuid.uuid4()}"
 
     # Doit retourner le résultat de la requête la table dynamodb
-    data = table.put_item(Item={"user": "USER#" + authorization, "id": postId, "body": post.body, "image": "", "labels": []})
+    data = table.put_item(
+        Item={
+            "user": "USER#" + authorization,
+            "id": postId,
+            "body": post.body,
+            "image": "",
+            "labels": [],
+        }
+    )
+
+    logger.info("POST data:\n" + json.dumps(data, indent=2))
     return data
 
 
@@ -69,14 +80,18 @@ async def get_all_posts(user: Union[str, None] = None):
         data = table.scan()
     else:
         data = table.query(KeyConditionExpression=Key("user").eq("USER#" + user))
-    return data
+
+    logger.info("GET data:\n" + json.dumps(data["Items"], indent=2))
+    return data["Items"]
 
 
 @app.delete("/posts/{post_id}")
 async def get_post_user_id(post_id: str):
-    
+
     data = table.delete_item(
-        Key={'id' : 'POST#'*(post_id[0] == 'P') + post_id,} # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
+        Key={
+            "id": "POST#" * (post_id[0] == "P") + post_id,
+        }  # On sait pas trop si en argument il y a le POST# ou pas ducoup on filtre
     )
     return data
 

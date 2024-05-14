@@ -33,7 +33,7 @@ class ServerlessStack(TerraformStack):
             self,
             "postagram_bucket",
             bucket_prefix="my-postagram-bucket",
-            acl="public-read",
+            acl="private",
             force_destroy=True,
         )
 
