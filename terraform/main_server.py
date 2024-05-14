@@ -8,15 +8,18 @@ from cdktf_cdktf_provider_aws.launch_template import LaunchTemplate
 from cdktf_cdktf_provider_aws.lb import Lb
 from cdktf_cdktf_provider_aws.lb_target_group import LbTargetGroup
 from cdktf_cdktf_provider_aws.lb_listener import LbListener, LbListenerDefaultAction
-from cdktf_cdktf_provider_aws.autoscaling_group import AutoscalingGroup
+from cdktf_cdktf_provider_aws.autoscaling_group import (
+    AutoscalingGroup,
+    AutoscalingGroupLaunchTemplate,
+)
 from cdktf_cdktf_provider_aws.security_group import (
     SecurityGroup,
     SecurityGroupIngress,
     SecurityGroupEgress,
 )
 from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdentity
-
 import base64
+
 
 bucket = "my-postagram-bucket20240514103701963500000001"
 dynamo_table = "postagram_dynamodb_table"
@@ -105,7 +108,7 @@ class ServerStack(TerraformStack):
         lb = Lb(
             self,
             "lb",
-            security_groups=[security_group],
+            security_groups=[security_group.id],
             subnets=subnets,
             load_balancer_type="application",
         )
@@ -125,15 +128,19 @@ class ServerStack(TerraformStack):
             load_balancer_arn=lb.arn,
             port=80,
             protocol="HTTP",
-            default_action=LbListenerDefaultAction(type="forward", target_group_arn=target_group.arn),
+            default_action=[
+                LbListenerDefaultAction(
+                    type="forward", target_group_arn=target_group.arn
+                )
+            ],
         )
 
         asg = AutoscalingGroup(
             self,
             "asg",
-            launch_template={
-                id:launch_template.id
-            },
+            launch_template=AutoscalingGroupLaunchTemplate(
+                id=launch_template.id, version="$Latest"
+            ),
             vpc_zone_identifier=subnets,
             target_group_arns=[target_group.arn],
             max_size=1,
