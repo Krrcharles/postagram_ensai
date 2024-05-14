@@ -11,6 +11,7 @@ s3 = boto3.client("s3")
 dynamodb = boto3.resource("dynamodb")
 reckognition = boto3.client("rekognition")
 
+
 table = dynamodb.Table(os.getenv("DYNAMO_TABLE"))
 
 
@@ -44,11 +45,11 @@ def lambda_handler(event, context):
     )
 
     url = s3.generate_presigned_url(
-    Params={
-    "Bucket": bucket,
-    "Key": key,
-    },
-    ClientMethod='get_object'
+        Params={
+            "Bucket": bucket,
+            "Key": key,
+        },
+        ClientMethod="get_object",
     )
 
     table.update_item(
@@ -56,4 +57,3 @@ def lambda_handler(event, context):
         UpdateExpression="SET image = :url",
         ExpressionAttributeValues={":url": url},
     )
-

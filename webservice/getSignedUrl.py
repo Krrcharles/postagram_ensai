@@ -7,7 +7,15 @@ import uuid
 from pathlib import Path
 from botocore.exceptions import ClientError
 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 bucket = os.getenv("BUCKET")
+
+print(">>>>>>>> BUCKET", bucket)
+print(">>>>>>>> BUCKET type", type(bucket))
+
 s3_client = boto3.client("s3", config=boto3.session.Config(signature_version="s3v4"))
 logger = logging.getLogger("uvicorn")
 
