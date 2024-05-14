@@ -97,7 +97,7 @@ class ServerStack(TerraformStack):
         launch_template = LaunchTemplate(
             self,
             "lt",
-            image_id="ami-0b0dcb5067f2727d8",
+            image_id="ami-04b70fa74e45c3917",
             instance_type="t2.micro",
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
