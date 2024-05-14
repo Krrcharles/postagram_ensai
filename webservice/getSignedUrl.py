@@ -23,7 +23,7 @@ logger = logging.getLogger("uvicorn")
 def getSignedUrl(filename: str, filetype: str, postId: str, user):
 
     filename = f"{uuid.uuid4()}{Path(filename).name}"
-    object_name = f"{user}/POST#{postId}/{filename}"
+    object_name = f"{user}/{postId}/{filename}"
 
     try:
         url = s3_client.generate_presigned_url(
