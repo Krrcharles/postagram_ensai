@@ -18,9 +18,9 @@ from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdent
 
 import base64
 
-bucket = ""
-dynamo_table = ""
-your_repo = ""
+bucket = "my-postagram-bucket20240514103701963500000001"
+dynamo_table = "postagram_dynamodb_table"
+your_repo = "https://github.com/Krrcharles/postagram_ensai"
 
 
 user_data = base64.b64encode(
