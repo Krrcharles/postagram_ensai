@@ -107,7 +107,6 @@ class ServerStack(TerraformStack):
             "lb",
             security_groups=[security_group.id],
             subnets=subnets,
-            target_group_arns=[launch_template.target_group.arn],
             load_balancer_type="application",
         )
 
