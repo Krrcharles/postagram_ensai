@@ -95,7 +95,7 @@ async def get_all_posts(user: Union[str, None] = None):
 
 # @app.delete("/posts/{post_id}")
 # async def get_post_user_id(post_id: str):
-#     pass
+#     raise NotImplementedError("Delete post not implemented")
 
 
 @app.get("/signedUrlPut")
