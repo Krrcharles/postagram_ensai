@@ -35,7 +35,7 @@ python3 -m venv venv
 source venv/bin/activate
 chmod -R a+rwx venv
 pip3 install -r requirements.txt
-python3 app.py
+sudo ./venv/bin/python app.py
 echo "userdata-end"
 """
 
@@ -59,7 +59,7 @@ python3 -m venv venv
 source venv/bin/activate
 chmod -R a+rwx venv
 pip3 install -r requirements.txt
-python3 app.py
+sudo ./venv/bin/python app.py
 echo "userdata-end"
 """.encode(
         "ascii"
@@ -143,7 +143,7 @@ class ServerStack(TerraformStack):
 
         lb_listener = LbListener(
             self,
-            "lb_listener",
+            "lb-listener",
             load_balancer_arn=lb.arn,
             port=80,
             protocol="HTTP",
