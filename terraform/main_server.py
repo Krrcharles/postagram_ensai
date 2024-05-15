@@ -4,7 +4,10 @@ from cdktf import App, TerraformStack
 from cdktf_cdktf_provider_aws.provider import AwsProvider
 from cdktf_cdktf_provider_aws.default_vpc import DefaultVpc
 from cdktf_cdktf_provider_aws.default_subnet import DefaultSubnet
-from cdktf_cdktf_provider_aws.launch_template import LaunchTemplate
+from cdktf_cdktf_provider_aws.launch_template import (
+    LaunchTemplate,
+    LaunchTemplateIamInstanceProfile,
+)
 from cdktf_cdktf_provider_aws.lb import Lb
 from cdktf_cdktf_provider_aws.lb_target_group import LbTargetGroup
 from cdktf_cdktf_provider_aws.lb_listener import LbListener, LbListenerDefaultAction
@@ -121,6 +124,9 @@ class ServerStack(TerraformStack):
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
+            iam_instance_profile=LaunchTemplateIamInstanceProfile(
+                arn=f"arn:aws:iam::{account_id}:role/LabRole"
+            ),
             tags={"Name": "postagram-server"},
         )
 

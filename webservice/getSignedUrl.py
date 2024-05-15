@@ -2,7 +2,6 @@ import logging
 import boto3
 from boto3.dynamodb.conditions import Key
 import os
-import json
 import uuid
 from pathlib import Path
 from botocore.exceptions import ClientError
@@ -13,8 +12,7 @@ load_dotenv()
 
 bucket = os.getenv("BUCKET")
 
-print(">>>>>>>> BUCKET", bucket)
-print(">>>>>>>> BUCKET type", type(bucket))
+print("> BUCKET", bucket)
 
 s3_client = boto3.client("s3", config=boto3.session.Config(signature_version="s3v4"))
 logger = logging.getLogger("uvicorn")
