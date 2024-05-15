@@ -124,9 +124,7 @@ class ServerStack(TerraformStack):
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
-            iam_instance_profile=LaunchTemplateIamInstanceProfile(
-                arn=f"arn:aws:iam::{account_id}:role/LabRole"
-            ),
+            # iam_instance_profile=LaunchTemplateIamInstanceProfile(arn=f"arn:aws:iam::{account_id}:instance-profile/<instance-profile-name>"),
             tags={"Name": "postagram-server"},
         )
 
