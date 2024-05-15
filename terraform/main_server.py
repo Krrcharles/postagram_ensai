@@ -20,6 +20,24 @@ from cdktf_cdktf_provider_aws.security_group import (
 from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdentity
 import base64
 
+# test presse-bouton
+"""
+#!/bin/bash
+echo "userdata-start"        
+sudo apt update
+sudo apt install -y python3-pip python3.12-venv
+git clone https://github.com/Krrcharles/postagram_ensai projet
+cd projet/webservice
+rm .env
+echo 'BUCKET=my-postagram-bucket20240514103701963500000001' >> .env
+echo 'DYNAMO_TABLE=postagram_dynamodb_table' >> .env
+python3 -m venv venv
+source venv/bin/activate
+chmod -R a+rwx venv
+pip3 install -r requirements.txt
+python3 app.py
+echo "userdata-end"
+"""
 
 bucket = "my-postagram-bucket20240514103701963500000001"
 dynamo_table = "postagram_dynamodb_table"

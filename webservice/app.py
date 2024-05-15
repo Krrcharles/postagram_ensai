@@ -114,4 +114,4 @@ async def get_signed_url_put(
 
 if __name__ == "__main__":
     logger.info("API is starting")
-    uvicorn.run(app, host="0.0.0.0", port=80, log_level="debug")
+    uvicorn.run(app, host="0.0.0.0", port=8080, log_level="debug")
