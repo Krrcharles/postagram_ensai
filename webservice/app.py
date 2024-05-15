@@ -13,7 +13,6 @@ from pydantic import BaseModel
 import uvicorn
 import uuid
 import json
-import time
 
 from getSignedUrl import getSignedUrl
 
@@ -114,4 +113,5 @@ async def get_signed_url_put(
 
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080, log_level="debug")
+    logger.info("API is starting")
+    uvicorn.run(app, host="0.0.0.0", port=80, log_level="debug")
