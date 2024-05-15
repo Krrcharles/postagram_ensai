@@ -58,6 +58,11 @@ s3_client = boto3.client("s3", config=boto3.session.Config(signature_version="s3
 bucket = os.getenv("BUCKET")
 
 
+@app.get("/")
+async def read_root():
+    return "API is running"
+
+
 @app.post("/posts")
 async def post_a_post(post: Post, authorization: str | None = Header(default=None)):
 
