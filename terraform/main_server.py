@@ -42,7 +42,8 @@ source venv/bin/activate
 chmod -R a+rwx venv
 pip3 install -r requirements.txt
 python3 app.py
-echo "userdata-end""".encode(
+echo "userdata-end"
+""".encode(
         "ascii"
     )
 ).decode("ascii")
@@ -143,9 +144,11 @@ class ServerStack(TerraformStack):
             ),
             vpc_zone_identifier=subnets,
             target_group_arns=[target_group.arn],
-            max_size=1,
-            min_size=3,
+            min_size=1,
+            max_size=3,
             desired_capacity=1,
+            health_check_type="EC2",
+            health_check_grace_period=300,
         )
 
 
