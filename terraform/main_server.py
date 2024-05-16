@@ -48,8 +48,7 @@ your_repo = "https://github.com/Krrcharles/postagram_ensai"
 
 
 user_data = base64.b64encode(
-    f"""
-#!/bin/bash
+    f"""#!/bin/bash
 echo "userdata-start"        
 sudo apt update
 sudo apt install -y python3-pip python3.12-venv
