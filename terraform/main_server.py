@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from constructs import Construct
-from cdktf import App, TerraformStack
+from cdktf import App, TerraformStack, TerraformOutput
 from cdktf_cdktf_provider_aws.provider import AwsProvider
 from cdktf_cdktf_provider_aws.default_vpc import DefaultVpc
 from cdktf_cdktf_provider_aws.default_subnet import DefaultSubnet
@@ -22,29 +22,14 @@ from cdktf_cdktf_provider_aws.security_group import (
 )
 from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdentity
 import base64
-from cdktf_cdktf_provider_aws.iam_instance_profile import IamInstanceProfile
 
-# test presse-bouton
-"""
-#!/bin/bash
-echo "userdata-start"        
-sudo apt update
-sudo apt install -y python3-pip python3.12-venv
-git clone https://github.com/Krrcharles/postagram_ensai projet
-cd projet/webservice
-rm .env
-echo 'BUCKET=my-postagram-bucket20240514103701963500000001' >> .env
-echo 'DYNAMO_TABLE=postagram_dynamodb_table' >> .env
-python3 -m venv venv
-source venv/bin/activate
-chmod -R a+rwx venv
-pip3 install -r requirements.txt
-sudo ./venv/bin/python app.py
-echo "userdata-end"
-"""
-
+####################################################################
+################### PUT FIRST cdktf OUTPUT HERE ####################
+####################################################################
 bucket = "my-postagram-bucket20240514103701963500000001"
 dynamo_table = "postagram_dynamodb_table"
+####################################################################
+
 your_repo = "https://github.com/Krrcharles/postagram_ensai"
 
 
@@ -171,6 +156,13 @@ class ServerStack(TerraformStack):
             min_size=1,
             max_size=3,
             desired_capacity=1,
+        )
+
+        # Output dynamo_table id
+        TerraformOutput(
+            self,
+            "URL to put in webapp/src/index.js (DNS name):",
+            value=lb.dns_name,
         )
 
 
