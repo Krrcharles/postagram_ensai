@@ -26,11 +26,12 @@ import base64
 ####################################################################
 ################### PUT FIRST cdktf OUTPUT HERE ####################
 ####################################################################
-bucket = "my-postagram-bucket20240514103701963500000001"
-dynamo_table = "postagram_dynamodb_table"
+bucket_id = "my-postagram-bucket20240516160144423700000001"
+dynamo_table_id = "postagram_dynamodb_table"
 ####################################################################
 
-your_repo = "https://github.com/Krrcharles/postagram_ensai"
+# Our repo, do not edit :
+repo_to_clone = "https://github.com/Krrcharles/postagram_ensai"
 
 
 user_data = base64.b64encode(
@@ -38,11 +39,11 @@ user_data = base64.b64encode(
 echo "userdata-start"        
 apt update
 apt install -y python3-pip python3.12-venv
-git clone {your_repo} projet
+git clone {repo_to_clone} projet
 cd projet/webservice
 rm .env
-echo 'BUCKET={bucket}' >> .env
-echo 'DYNAMO_TABLE={dynamo_table}' >> .env
+echo 'BUCKET={bucket_id}' >> .env
+echo 'DYNAMO_TABLE={dynamo_table_id}' >> .env
 python3 -m venv venv
 source venv/bin/activate
 chmod -R a+rwx venv
