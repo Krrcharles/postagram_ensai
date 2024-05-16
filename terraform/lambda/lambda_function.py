@@ -24,6 +24,7 @@ def lambda_handler(event, context):
     key = unquote_plus(event["Records"][0]["s3"]["object"]["key"])
     # extration de l'utilisateur et de l'id de la tâche
     user, task_id = key.split("/")[:2]
+    #On ajoute les tag USER# et POST# car la webapp les enlève systématiquement
     user = "USER#" + user
     task_id = "POST#" + task_id
 
