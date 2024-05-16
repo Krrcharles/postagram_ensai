@@ -14,15 +14,17 @@ pipenv shell
 selectionner l'interpréteur commençant par ```Terraform....```
 
 ```bash
-cdktf deploy -a python3 main_serverless.py
+cdktf deploy
 ```
 
 Copier les sorties Terraform correspondantes à l'id du Bucket et celui de la table DynamoDB
 
 Coller ces valeurs dans les emplacements prévus à cet effet dans le fichier ```main_server.py```
 
+Dans ```cdktf.json```, changer à la troisième ligne ```'app'``` : ```main_serverless.py``` en ```main_server.py```
+
 ```bash
-cdktf deploy -a python3 main_server.py
+cdktf deploy
 ```
 
 Copier la valeur de l'adresse DNS du loadbalancer donnée dans la sortie Terraform
