@@ -50,8 +50,8 @@ your_repo = "https://github.com/Krrcharles/postagram_ensai"
 user_data = base64.b64encode(
     f"""#!/bin/bash
 echo "userdata-start"        
-sudo apt update
-sudo apt install -y python3-pip python3.12-venv
+apt update
+apt install -y python3-pip python3.12-venv
 git clone {your_repo} projet
 cd projet/webservice
 rm .env
