@@ -9,11 +9,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 
-// ********************************************** //
-// ******** PUT SECOND cdktf OUTPUT HERE ******** //
-// ********************************************** //
-axios.defaults.baseURL = "http://localhost:8080"
-// ********************************************** //
+// **********************************************
+// ******** PUT SECOND cdktf OUTPUT HERE ********
+// **********************************************
+axios.defaults.baseURL = "http://tf-lb-20240516163808906400000003-287713641.us-east-1.elb.amazonaws.com"
+// **********************************************
 
 root.render(
   <React.StrictMode>
