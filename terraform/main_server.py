@@ -22,6 +22,7 @@ from cdktf_cdktf_provider_aws.security_group import (
 )
 from cdktf_cdktf_provider_aws.data_aws_caller_identity import DataAwsCallerIdentity
 import base64
+from cdktf_cdktf_provider_aws.iam_instance_profile import IamInstanceProfile
 
 # test presse-bouton
 """
@@ -123,7 +124,9 @@ class ServerStack(TerraformStack):
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
-            # iam_instance_profile=LaunchTemplateIamInstanceProfile(arn=f"arn:aws:iam::{account_id}:instance-profile/<instance-profile-name>"),
+            iam_instance_profile=LaunchTemplateIamInstanceProfile(
+                arn=f"arn:aws:iam::{account_id}:instance-profile/LabInstanceProfile"
+            ),
             tags={"Name": "postagram-server"},
         )
 
