@@ -35,6 +35,7 @@ cdktf deploy
 Copier la valeur de l'adresse DNS du loadbalancer donnée dans la sortie Terraform
 
 Coller cette valeur dans le fichier ```webapp/src/index.js``` dans la variable ```axios.defaults.baseURL``` pour indiquer l'adresse de l'API à la Webapp
+
 Attention il faut bien mettre le ```http://``` au début sinon l'url sera mal interprétée
 
 Dans ```webapp/```
