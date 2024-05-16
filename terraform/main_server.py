@@ -109,6 +109,7 @@ class ServerStack(TerraformStack):
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
+            #On défini un profil IAM pour les instances, pour pouvoir accéder à la table dynamoDB
             iam_instance_profile=LaunchTemplateIamInstanceProfile(
                 arn=f"arn:aws:iam::{account_id}:instance-profile/LabInstanceProfile"
             ),
@@ -158,7 +159,7 @@ class ServerStack(TerraformStack):
             desired_capacity=1,
         )
 
-        # Output dynamo_table id
+        # Output dynamo_table id à mettre dans le index.js de la webapp
         TerraformOutput(
             self,
             "URL to put in webapp/src/index.js (DNS name):",
