@@ -4,6 +4,11 @@ Charles CARRERE
 
 ## Setup
 
+Mettre à jour les informations de connection à AWS dans ```home/.aws/credentials``` (ctrl+H pour afficher les répertoires cachés), ou via la commande
+```bash
+aws configure
+```
+
 Dans répertoire ```Terraform/```
 
 ```bash
