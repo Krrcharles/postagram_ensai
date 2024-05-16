@@ -26,7 +26,7 @@ import base64
 ####################################################################
 ################### PUT FIRST cdktf OUTPUT HERE ####################
 ####################################################################
-bucket_id = "my-postagram-bucket20240516160144423700000001"
+bucket_id = "my-postagram-bucket20240516163504785900000001"
 dynamo_table_id = "postagram_dynamodb_table"
 ####################################################################
 
@@ -110,7 +110,7 @@ class ServerStack(TerraformStack):
             user_data=user_data,
             vpc_security_group_ids=[security_group.id],
             key_name="vockey",
-            #On défini un profil IAM pour les instances, pour pouvoir accéder à la table dynamoDB
+            # On défini un profil IAM pour les instances, pour pouvoir accéder à la table dynamoDB
             iam_instance_profile=LaunchTemplateIamInstanceProfile(
                 arn=f"arn:aws:iam::{account_id}:instance-profile/LabInstanceProfile"
             ),
@@ -163,8 +163,8 @@ class ServerStack(TerraformStack):
         # Output dynamo_table id à mettre dans le index.js de la webapp
         TerraformOutput(
             self,
-            "URL to put in webapp/src/index.js (DNS name):",
-            value=lb.dns_name,
+            "URL to put in index.js (http + DNS name):",
+            value="http://" + lb.dns_name,
         )
 
 
