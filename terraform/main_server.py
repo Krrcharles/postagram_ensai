@@ -61,7 +61,7 @@ python3 -m venv venv
 source venv/bin/activate
 chmod -R a+rwx venv
 pip3 install -r requirements.txt
-sudo ./venv/bin/python app.py
+python3 app.py
 echo "userdata-end"
 """.encode(
         "ascii"
